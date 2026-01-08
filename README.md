@@ -2,7 +2,7 @@
 # [PROYECTO_1]
 ### Nombre y carné de los integrantes:
 - Noé López Durón - 2024234500.
-
+- Samuel Garcés Castillo - 2022129139
 
 ### Estado del proyecto:
 ### Enlace del video:

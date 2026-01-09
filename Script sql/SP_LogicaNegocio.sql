@@ -1,12 +1,15 @@
 /*
  * NOMBRE DEL SCRIPT: SP_LogicaNegocio.sql
- * DESCRIPCIÓN: Colección de Procedimientos Almacenados (CRUD).
+ * DESCRIPCIÓN: Colección COMPLETA de Procedimientos Almacenados (CRUD) para todos los módulos.
  */
 
 USE GestionHoteleraDB;
 GO
 
--- MÓDULO HOSPEDAJE
+-- ==========================================================================================
+-- MÓDULO 1: GESTIÓN DE HOSPEDAJES
+-- ==========================================================================================
+
 CREATE OR ALTER PROCEDURE sp_RegistrarHospedaje
     @NombreComercial NVARCHAR(150),
     @CedulaJuridica NVARCHAR(20),
@@ -45,11 +48,15 @@ BEGIN
     DELETE FROM HospedajeTelefono WHERE IdHospedaje = @IdHospedaje;
     DELETE FROM HospedajeServicio WHERE IdHospedaje = @IdHospedaje;
     DELETE FROM HospedajeRedSocial WHERE IdHospedaje = @IdHospedaje;
+    DELETE FROM TipoHabitacion WHERE IdHospedaje = @IdHospedaje;
     DELETE FROM Hospedaje WHERE IdHospedaje = @IdHospedaje;
 END
 GO
 
--- MÓDULO HABITACIONES
+-- ==========================================================================================
+-- MÓDULO 2: GESTIÓN DE HABITACIONES
+-- ==========================================================================================
+
 CREATE OR ALTER PROCEDURE sp_GestioHabitacion
     @Accion NVARCHAR(20),
     @IdHabitacion INT = NULL,
@@ -72,7 +79,10 @@ BEGIN
 END
 GO
 
--- MÓDULO CLIENTES
+-- ==========================================================================================
+-- MÓDULO 3: GESTIÓN DE CLIENTES
+-- ==========================================================================================
+
 CREATE OR ALTER PROCEDURE sp_RegistrarCliente
     @Nombre NVARCHAR(100),
     @PrimerApellido NVARCHAR(100),
@@ -110,7 +120,10 @@ BEGIN
 END
 GO
 
--- MÓDULO OPERACIONES
+-- ==========================================================================================
+-- MÓDULO 4: OPERACIONES (RESERVAS Y FACTURACIÓN)
+-- ==========================================================================================
+
 CREATE OR ALTER PROCEDURE sp_CrearReservacion
     @IdCliente INT,
     @IdHabitacion INT,
@@ -161,5 +174,47 @@ BEGIN
     VALUES (@IdReservacion, @MetodoPago, @NumNoches, @Total);
 
     SELECT 'Factura generada exitosamente' AS Resultado, @Total AS MontoTotal;
+END
+GO
+
+-- ==========================================================================================
+-- MÓDULO 5: GESTIÓN DE RECREACIÓN
+-- ==========================================================================================
+
+CREATE OR ALTER PROCEDURE sp_RegistrarEmpresaRecreacion
+    @NombreEmpresa NVARCHAR(150),
+    @CedulaJuridica NVARCHAR(50),
+    @Email NVARCHAR(100),
+    @Telefono NVARCHAR(20),
+    @Contacto NVARCHAR(100),
+    @Provincia NVARCHAR(50),
+    @Canton NVARCHAR(50),
+    @Distrito NVARCHAR(50),
+    @Senas NVARCHAR(255)
+AS
+BEGIN
+    INSERT INTO EmpresaRecreacion (NombreEmpresa, CedulaJuridica, CorreoElectronico, Telefono, NombreContacto, Provincia, Canton, Distrito, SenasExactas)
+    VALUES (@NombreEmpresa, @CedulaJuridica, @Email, @Telefono, @Contacto, @Provincia, @Canton, @Distrito, @Senas);
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_AgregarActividad
+    @IdEmpresa INT,
+    @TipoActividad NVARCHAR(100),
+    @Descripcion NVARCHAR(MAX),
+    @Precio DECIMAL(10,2)
+AS
+BEGIN
+    INSERT INTO ActividadRecreativa (IdEmpresaRecreacion, TipoActividad, Descripcion, Precio)
+    VALUES (@IdEmpresa, @TipoActividad, @Descripcion, @Precio);
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_EliminarEmpresaRecreacion
+    @IdEmpresa INT
+AS
+BEGIN
+    DELETE FROM ActividadRecreativa WHERE IdEmpresaRecreacion = @IdEmpresa;
+    DELETE FROM EmpresaRecreacion WHERE IdEmpresaRecreacion = @IdEmpresa;
 END
 GO

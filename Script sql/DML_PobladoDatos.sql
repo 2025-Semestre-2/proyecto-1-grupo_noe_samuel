@@ -1,6 +1,6 @@
 /*
  * NOMBRE DEL SCRIPT: DML_PobladoDatos.sql
- * DESCRIPCIÓN: Script DML corregido y alineado con los nuevos requisitos NOT NULL.
+ * DESCRIPCIÓN: Script DML y alineado con los requisitos
  */
 
 USE GestionHoteleraDB;
